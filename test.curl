@@ -1,0 +1,5 @@
+curl -i \
+  -H 'Harvest-Account-ID: 1490942'\
+  -H 'Authorization: Bearer 3678462.pt.1mV1OCYNwqjkux4rkmvy2kQuFPXFJAfOM5fCLrZ9wvD23qOV7SzK-d4DsS6m5p0YNe30nn5p9yfeS8RjE6bbdA'\
+  -H 'User-Agent: Harvest API Example' \
+  "https://api.harvestapp.com/api/v2/users/me.json"
