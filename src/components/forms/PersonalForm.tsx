@@ -1,26 +1,24 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { personalSchema } from '@/utils/schemas'
-import { useEffect } from 'react'
-import { fetchData } from '@/utils/db'
+import { useContext, useEffect } from "react";
+import { DataContext } from "@/utils/context";
 
 interface Props {
     onSubmit: (data: any) => void
 }
 
 const PersonalForm = ({ onSubmit }: Props) => {
+    const { personal } = useContext(DataContext);
     const form = useForm({
         resolver: yupResolver(personalSchema),
         defaultValues: { name: '', info: '', companyInfo: '' }
     })
 
     useEffect(() => {
-        const load = async () => {
-            const config = await fetchData('personal', 1)
-            if (config) form.reset(config)
-        }
-        load()
-    }, [form])
+      if (personal) form.reset(personal);
+    }, [personal, form]);
+    
 
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
