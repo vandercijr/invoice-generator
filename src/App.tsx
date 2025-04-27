@@ -8,7 +8,7 @@ import { DataContext } from "@/utils/context";
 import { ApiConfig, Invoice, Payment, Personal } from "@types";
 
 const App = () => {
-  const [tab, setTab] = useState("personal");
+  const [tab, setTab] = useState("worktime");
   const [harvestData, setHarvestData] = useState<any[]>([]);
   const [db, setDb] = useState<any>(null);
   const [invoiceInfo, setInvoiceInfo] = useState({} as Invoice);

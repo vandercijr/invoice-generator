@@ -8,6 +8,7 @@ export const formatNumber = (
     ? whenInvalid
     : Intl.NumberFormat("en-US", {
         style: currency ? "currency" : "decimal",
+        ...(currency ? { currency: "USD" } : {}),
         minimumFractionDigits: digits,
         maximumFractionDigits: digits,
       }).format(value);

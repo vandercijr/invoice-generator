@@ -25,6 +25,7 @@ const InvoiceForm = ({ onSubmit }: Props) => {
   useEffect(() => {
     if (invoice) form.reset(invoice);
   }, [invoice, form]);
+
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
       <div>

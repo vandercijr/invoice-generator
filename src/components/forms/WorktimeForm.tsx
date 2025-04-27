@@ -35,11 +35,11 @@ const WorktimeForm = ({ onFetch }: Props) => {
                 {formatNumber(project.total_hours, 2, false, "0.00")}
               </td>
               <td className="text-right">
-                {formatNumber(rate, 2, false, "0.00")}
+                {formatNumber(rate, 2, true, "0.00")}
               </td>
               <td className="text-right">
                 {" "}
-                {formatNumber(project.total_hours * rate, 2, false, "0.00")}
+                {formatNumber(project.total_hours * rate, 2, true, "0.00")}
               </td>
             </tr>
           ))}

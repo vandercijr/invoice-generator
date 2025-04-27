@@ -3,6 +3,7 @@ import { Table, TR, TH, TD } from "@ag-media/react-pdf-table";
 import { Invoice, Payment, Personal } from "@types";
 import { formatNumber } from "@/utils/format";
 import { format } from "date-fns";
+import { dateToLocalISOMidnight } from "@/utils/date";
 
 type InvoicePDFProps = {
   invoice: Invoice;
@@ -14,7 +15,7 @@ type InvoicePDFProps = {
 const styles = StyleSheet.create({
   page: {
     padding: 40,
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: "Helvetica",
     flexDirection: "column",
     justifyContent: "space-between", // important!
@@ -32,10 +33,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   leftColumn: {
-    width: "60%",
+    width: "55%",
   },
   rightColumn: {
-    width: "40%",
+    width: "45%",
     textAlign: "right",
   },
   alignLeft: {
@@ -57,11 +58,15 @@ const styles = StyleSheet.create({
     borderRight: 0,
   },
   table: {
-    backgroundColor: "#eefd33",
+    width: "100%",
   },
   tableHeader: {
     backgroundColor: "#fff",
     fontWeight: "bold",
+    height: "30px",
+  },
+  tableCell: {
+    height: "30px",
   },
   paymentInfo: {
     marginTop: 20,
@@ -89,12 +94,14 @@ const InvoicePDF = ({
   worktime,
 }: InvoicePDFProps) => {
   const rate = invoice.rate ?? 0;
+  const totalAmount =
+    worktime.reduce((acc, w) => acc + w.total_hours, 0) * rate;
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.contentWrapper}>
           <View>
-            <View style={[styles.section, styles.row]}>
+            <View style={[styles.section, styles.row, { marginLeft: 50 }]}>
               <View style={styles.leftColumn}>
                 <Text style={{ ...styles.bold, marginBottom: 10 }}>
                   {personal.name}
@@ -108,16 +115,22 @@ const InvoicePDF = ({
                 <Text style={styles.bold}>INVOICE #{invoice.number}</Text>
                 <Text style={{ marginBottom: 10 }}>
                   <Text style={styles.bold}>ISSUED DATE: </Text>
-                  {format(invoice.issuedDate, "MMM dd, yyyy").toUpperCase()}
+                  {format(
+                    dateToLocalISOMidnight(invoice.issuedDate),
+                    "MMM dd, yyyy"
+                  ).toUpperCase()}
                 </Text>
                 <Text style={{ ...styles.bold, ...styles.blueText }}>
                   DUE DATE:{" "}
-                  {format(invoice.dueDate, "MMM dd, yyyy").toUpperCase()}
+                  {format(
+                    dateToLocalISOMidnight(invoice.dueDate),
+                    "MMM dd, yyyy"
+                  ).toUpperCase()}
                 </Text>
               </View>
             </View>
 
-            <View style={[styles.section, styles.row]}>
+            <View style={[styles.section, styles.row, { marginLeft: 50 }]}>
               <View style={styles.leftColumn}>
                 <Text style={styles.bold}>TO:</Text>
                 <Text>{personal.companyInfo}</Text>
@@ -125,14 +138,15 @@ const InvoicePDF = ({
               <View style={styles.rightColumn}>
                 <Text style={styles.bold}>FOR:</Text>
                 <Text>
-                  Billing Period – {format(invoice.from, "MMM dd, yyyy")} to{" "}
-                  {format(invoice.to, "MMM dd, yyyy")}
+                  Billing Period –{" "}
+                  {format(dateToLocalISOMidnight(invoice.from), "MMM dd, yyyy")}{" "}
+                  to{" "}
+                  {format(dateToLocalISOMidnight(invoice.to), "MMM dd, yyyy")}
                 </Text>
               </View>
             </View>
 
-            {/* Table */}
-            <View style={styles.section}>
+            <View style={[styles.section, { marginLeft: 50 }]}>
               <Table style={styles.table}>
                 <TH>
                   <TD
@@ -140,6 +154,8 @@ const InvoicePDF = ({
                       ...styles.tableHeader,
                       ...styles.noBorder,
                       justifyContent: "flex-start",
+                      flexGrow: 1,
+                      minWidth: "150px",
                     }}
                   >
                     PROJECT / TASK
@@ -149,6 +165,8 @@ const InvoicePDF = ({
                       ...styles.tableHeader,
                       ...styles.noBorder,
                       justifyContent: "flex-start",
+                      flexGrow: 1,
+                      minWidth: "80px",
                     }}
                   >
                     CLIENT
@@ -158,6 +176,8 @@ const InvoicePDF = ({
                       ...styles.tableHeader,
                       ...styles.noBorder,
                       justifyContent: "flex-end",
+                      flexGrow: 1,
+                      minWidth: "50px",
                     }}
                   >
                     HOURS
@@ -167,6 +187,8 @@ const InvoicePDF = ({
                       ...styles.tableHeader,
                       ...styles.noBorder,
                       justifyContent: "flex-end",
+                      flexGrow: 1,
+                      minWidth: "50px",
                     }}
                   >
                     RATE
@@ -176,6 +198,8 @@ const InvoicePDF = ({
                       ...styles.tableHeader,
                       ...styles.noBorder,
                       justifyContent: "flex-end",
+                      flexGrow: 1,
+                      minWidth: "70px",
                     }}
                   >
                     AMOUNT
@@ -186,7 +210,10 @@ const InvoicePDF = ({
                     <TD
                       style={{
                         ...styles.noBorder,
+                        ...styles.tableCell,
                         justifyContent: "flex-start",
+                        flexGrow: 1,
+                        minWidth: "150px",
                       }}
                     >
                       {project.project_name}
@@ -194,7 +221,10 @@ const InvoicePDF = ({
                     <TD
                       style={{
                         ...styles.noBorder,
+                        ...styles.tableCell,
                         justifyContent: "flex-start",
+                        flexGrow: 1,
+                        minWidth: "80px",
                       }}
                     >
                       {project.client_name}
@@ -202,7 +232,10 @@ const InvoicePDF = ({
                     <TD
                       style={{
                         ...styles.noBorder,
+                        ...styles.tableCell,
                         justifyContent: "flex-end",
+                        flexGrow: 1,
+                        minWidth: "50px",
                       }}
                     >
                       {formatNumber(project.total_hours, 2, false, "0.00")}
@@ -210,22 +243,27 @@ const InvoicePDF = ({
                     <TD
                       style={{
                         ...styles.noBorder,
+                        ...styles.tableCell,
                         justifyContent: "flex-end",
+                        flexGrow: 1,
+                        minWidth: "50px",
                       }}
                     >
-                      {" "}
-                      {formatNumber(rate, 2, false, "0.00")}
+                      {formatNumber(rate, 2, true, "0.00")}
                     </TD>
                     <TD
                       style={{
                         ...styles.noBorder,
+                        ...styles.tableCell,
                         justifyContent: "flex-end",
+                        flexGrow: 1,
+                        minWidth: "70px",
                       }}
                     >
                       {formatNumber(
                         project.total_hours * rate,
                         2,
-                        false,
+                        true,
                         "0.00"
                       )}
                     </TD>
@@ -235,7 +273,9 @@ const InvoicePDF = ({
               <View style={styles.row}>
                 <View style={styles.leftColumn}></View>
                 <View style={styles.rightColumn}>
-                  <Text style={styles.bold}>TOTAL $2,177.19</Text>
+                  <Text style={styles.bold}>
+                    TOTAL {formatNumber(totalAmount, 2, true, "0.00")}
+                  </Text>
                 </View>
               </View>
             </View>
