@@ -1,7 +1,7 @@
 import { openDB } from 'idb'
 
 const DB_NAME = 'invoiceApp'
-const DB_VERSION  = 3
+const DB_VERSION = 4;
 export const getDb = async () => {
     return openDB(DB_NAME, DB_VERSION, {
         upgrade(db) {
@@ -13,6 +13,9 @@ export const getDb = async () => {
             }
             if (!db.objectStoreNames.contains('payment')) {
                 db.createObjectStore('payment', { keyPath: 'id' })
+            }
+            if (!db.objectStoreNames.contains("emailConfig")) {
+              db.createObjectStore("emailConfig", { keyPath: "id" });
             }
             if (!db.objectStoreNames.contains('apiConfig')) {
                 db.createObjectStore('apiConfig', { keyPath: 'id' })

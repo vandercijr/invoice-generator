@@ -4,6 +4,7 @@ import InvoiceForm from '@/components/forms/InvoiceForm'
 import WorktimeForm from '@/components/forms/WorktimeForm'
 import ApiConfigForm from '@/components/forms/ApiConfigForm'
 import PaymentInfoForm from '@/components/forms/PaymentInfoForm'
+import SendEmailConfigForm from "@/components/forms/SendEmailConfigForm";
 
 interface Props {
   tab: string;
@@ -13,6 +14,7 @@ interface Props {
   onPaymentSubmit: (data: any) => void;
   onInvoiceSubmit: (data: any) => void;
   onApiConfigSubmit: (data: any) => void;
+  onSendEmailConfigSubmit: (data: any) => void;
 }
 
 const TabsContainer = ({
@@ -23,6 +25,7 @@ const TabsContainer = ({
   onPaymentSubmit,
   onInvoiceSubmit,
   onApiConfigSubmit,
+  onSendEmailConfigSubmit,
 }: Props) => {
   return (
     <Tabs
@@ -50,6 +53,12 @@ const TabsContainer = ({
           Payment Info
         </TabsTrigger>
         <TabsTrigger
+          value="emailConfig"
+          className="px-4 py-2 text-sm font-medium text-gray-600 rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
+        >
+          Send Email Config
+        </TabsTrigger>
+        <TabsTrigger
           value="invoice"
           className="px-4 py-2 text-sm font-medium text-gray-600 rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
         >
@@ -72,6 +81,9 @@ const TabsContainer = ({
         </TabsContent>
         <TabsContent value="account" className="p-6">
           <PaymentInfoForm onSubmit={onPaymentSubmit} />
+        </TabsContent>
+        <TabsContent value="emailConfig" className="p-6">
+          <SendEmailConfigForm onSubmit={onSendEmailConfigSubmit} />
         </TabsContent>
         <TabsContent value="invoice" className="p-6">
           <InvoiceForm onSubmit={onInvoiceSubmit} />

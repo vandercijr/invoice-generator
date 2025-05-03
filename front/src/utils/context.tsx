@@ -6,5 +6,6 @@ export const DataContext = createContext<DataContextType>({
   payment: null,
   apiConfig: null,
   personal: null,
+  emailConfig: null,
   worktime: [],
 });

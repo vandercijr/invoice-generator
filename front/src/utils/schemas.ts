@@ -27,3 +27,15 @@ export const apiConfigSchema = yup.object({
     accountId: yup.number().typeError('Must be a number').required('Required'),
     token: yup.string().length(97, 'Must be 97 characters').required('Required')
 })
+
+
+export const sendEmailConfigSchema = yup.object({
+  emailTo: yup
+    .string()
+    .email("Invalid email")
+    .required("Recipient email is required"),
+  emailSender: yup
+    .string()
+    .email("Invalid email")
+    .required("Sender email is required"),
+});
