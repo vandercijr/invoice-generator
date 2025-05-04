@@ -1,10 +1,8 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
-import { version } from './package.json'
-
-const resolvePath = (p: string) => path.resolve(__dirname, "src", p);
-
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
+import { version } from "./package.json";
+const resolvePath = (p) => path.resolve(__dirname, "src", p);
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
