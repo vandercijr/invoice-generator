@@ -1,15 +1,17 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { paymentSchema } from "@utils/schemas";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { DataContext } from "@utils/context";
+import { Payment } from "@types";
 
 interface Props {
-  onSubmit: (data: any) => void;
+  onSubmit: (name: string, data: Payment, callback?: (any) => void) => void;
 }
 
 const PaymentInfoForm = ({ onSubmit }: Props) => {
   const { payment } = useContext(DataContext);
+  const [progress, setProgress] = useState<string | null>(null);
 
   const form = useForm({
     resolver: yupResolver(paymentSchema),
@@ -22,12 +24,22 @@ const PaymentInfoForm = ({ onSubmit }: Props) => {
     },
   });
 
+  const submitHandler = (data: Payment) => {
+    setProgress("Salving");
+    onSubmit("payment", data, () => {
+      setProgress("Saved");
+      setTimeout(() => {
+        setProgress(null);
+      }, 2000);
+    });
+  };
+
   useEffect(() => {
     if (payment) form.reset(payment);
   }, [payment, form]);
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={form.handleSubmit(submitHandler)} className="space-y-4">
       <div>
         <label className="block mb-1">Type</label>
         <input
@@ -65,9 +77,9 @@ const PaymentInfoForm = ({ onSubmit }: Props) => {
       </div>
       <button
         type="submit"
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        className="min-w-[12rem] px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
       >
-        Save Payment Info
+        {progress ?? "Save Payment Info"}
       </button>
     </form>
   );

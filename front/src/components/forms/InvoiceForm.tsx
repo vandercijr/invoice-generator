@@ -1,15 +1,18 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { invoiceSchema } from "@utils/schemas";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { DataContext } from "@utils/context";
+import { Invoice } from "@types";
 
 interface Props {
-  onSubmit: (data: any) => void;
+  onSubmit: (name: string, data: Invoice, callback?: (any) => void) => void;
 }
 
 const InvoiceForm = ({ onSubmit }: Props) => {
   const { invoice } = useContext(DataContext);
+  const [progress, setProgress] = useState<string | null>(null);
+
   const form = useForm({
     resolver: yupResolver(invoiceSchema),
     defaultValues: {
@@ -22,12 +25,22 @@ const InvoiceForm = ({ onSubmit }: Props) => {
     },
   });
 
+  const submitHandler = (data: Invoice) => {
+    setProgress("Saving");
+    onSubmit("invoice", data, () => {
+      setProgress("Saved");
+      setTimeout(() => {
+        setProgress(null);
+      }, 2000);
+    });
+  };
+
   useEffect(() => {
     if (invoice) form.reset(invoice);
   }, [invoice, form]);
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={form.handleSubmit(submitHandler)} className="space-y-4">
       <div>
         <label className="block mb-1">Invoice Number</label>
         <input
@@ -81,9 +94,9 @@ const InvoiceForm = ({ onSubmit }: Props) => {
       </div>
       <button
         type="submit"
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        className="min-w-[12rem] px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
       >
-        Save Invoice Info
+        {progress ?? "Save Invoice Info"}
       </button>
     </form>
   );

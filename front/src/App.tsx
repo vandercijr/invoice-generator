@@ -19,50 +19,26 @@ const App = () => {
   const [personalInfo, setPersonalInfo] = useState({} as Personal);
   const [paymentInfo, setPaymentInfo] = useState({} as Payment);
   const [emailConfig, setEmailConfig] = useState({} as EmailConfig);
+  const [reloadData, setReloadData] = useState(true);
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     getDb().then(setDb);
   }, []);
 
-  const handlePersonalSubmit = async (data: any) => {
+  const handleSubmit = async (
+    store: string,
+    data: ApiConfig | Personal | Payment | EmailConfig | Invoice,
+    callback?: (any) => void
+  ) => {
     if (!db) return;
-    const tx = db.transaction("personal", "readwrite");
-    await tx.objectStore("personal").put({ id: 1, ...data });
+    const tx = db.transaction(store, "readwrite");
+    await tx.objectStore(store).put({ id: 1, ...data });
     await tx.done;
-    alert("Personal info saved.");
-  };
-
-  const handleInvoiceSubmit = async (data: any) => {
-    if (!db) return;
-    const tx = db.transaction("invoice", "readwrite");
-    await tx.objectStore("invoice").put({ id: 1, ...data });
-    await tx.done;
-    // localStorage.setItem('invoiceNumber', data.number)
-    alert("Invoice info saved.");
-  };
-
-  const handlePaymentSubmit = async (data: any) => {
-    if (!db) return;
-    const tx = db.transaction("payment", "readwrite");
-    await tx.objectStore("payment").put({ id: 1, ...data });
-    await tx.done;
-    alert("Payment info saved.");
-  };
-
-  const handleApiConfigSubmit = async (data: any) => {
-    if (!db) return;
-    const tx = db.transaction("apiConfig", "readwrite");
-    await tx.objectStore("apiConfig").put({ id: 1, ...data });
-    await tx.done;
-    alert("Api config saved.");
-  };
-
-  const handleSendEmailConfigSubmit = async (data: any) => {
-    if (!db) return;
-    const tx = db.transaction("emailConfig", "readwrite");
-    await tx.objectStore("emailConfig").put({ id: 1, ...data });
-    await tx.done;
-    alert("Send email config saved.");
+    setReloadData(true);
+    if (callback) {
+      callback(null);
+    }
   };
 
   const handleFetchHarvest = async () => {
@@ -71,22 +47,26 @@ const App = () => {
   };
 
   useEffect(() => {
-    const load = async () => {
-      const invoice = await fetchData("invoice", 1);
-      const config = await fetchData("apiConfig", 1);
-      const payment = await fetchData("payment", 1);
-      const personal = await fetchData("personal", 1);
-      const emailConfig = await fetchData("emailConfig", 1);
-      if (payment) setPaymentInfo(payment);
-      if (personal) setPersonalInfo(personal);
-      if (config) setApiConfig(config);
-      if (invoice) setInvoiceInfo(invoice);
-      if (emailConfig) setEmailConfig(emailConfig);
-    };
-    load();
-  }, []);
+    if (reloadData) {
+      const load = async () => {
+        const invoice = await fetchData("invoice", 1);
+        const config = await fetchData("apiConfig", 1);
+        const payment = await fetchData("payment", 1);
+        const personal = await fetchData("personal", 1);
+        const emailConfig = await fetchData("emailConfig", 1);
+        if (payment) setPaymentInfo(payment);
+        if (personal) setPersonalInfo(personal);
+        if (config) setApiConfig(config);
+        if (invoice) setInvoiceInfo(invoice);
+        if (emailConfig) setEmailConfig(emailConfig);
+      };
+      load();
+      setReloadData(false);
+    }
+  }, [reloadData]);
 
   const handleSendEmail = async () => {
+    setSending(true);
     const blob = await pdf(
       <InvoicePDF
         invoice={invoiceInfo}
@@ -113,6 +93,7 @@ const App = () => {
     formData.append("attachment", attachment);
 
     await sendInvoice(formData);
+    setSending(false);
   };
 
   return (
@@ -132,11 +113,7 @@ const App = () => {
             tab={tab}
             setTab={setTab}
             onFetchHarvest={handleFetchHarvest}
-            onPersonalSubmit={handlePersonalSubmit}
-            onInvoiceSubmit={handleInvoiceSubmit}
-            onPaymentSubmit={handlePaymentSubmit}
-            onApiConfigSubmit={handleApiConfigSubmit}
-            onSendEmailConfigSubmit={handleSendEmailConfigSubmit}
+            onSubmit={handleSubmit}
           />
 
           {!!invoiceInfo &&
@@ -168,7 +145,7 @@ const App = () => {
                   onClick={handleSendEmail}
                   className="flex-1 bg-amber-500 text-white font-semibold rounded hover:bg-amber-600"
                 >
-                  Send PDF
+                  {sending ? "Sending..." : "Send PDF"}
                 </button>
               </div>
             </div>

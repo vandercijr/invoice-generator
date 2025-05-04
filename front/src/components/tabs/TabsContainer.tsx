@@ -5,28 +5,20 @@ import WorktimeForm from "@components/forms/WorktimeForm";
 import ApiConfigForm from "@components/forms/ApiConfigForm";
 import PaymentInfoForm from "@components/forms/PaymentInfoForm";
 import SendEmailConfigForm from "@components/forms/SendEmailConfigForm";
+import { ApiConfig, EmailConfig, Invoice, Payment, Personal } from "@types";
 
 interface Props {
   tab: string;
   setTab: (value: string) => void;
   onFetchHarvest: () => void;
-  onPersonalSubmit: (data: any) => void;
-  onPaymentSubmit: (data: any) => void;
-  onInvoiceSubmit: (data: any) => void;
-  onApiConfigSubmit: (data: any) => void;
-  onSendEmailConfigSubmit: (data: any) => void;
+  onSubmit: (
+    name: string,
+    data: ApiConfig | Personal | Payment | EmailConfig | Invoice,
+    callback?: (any) => void
+  ) => void;
 }
 
-const TabsContainer = ({
-  tab,
-  setTab,
-  onFetchHarvest,
-  onPersonalSubmit,
-  onPaymentSubmit,
-  onInvoiceSubmit,
-  onApiConfigSubmit,
-  onSendEmailConfigSubmit,
-}: Props) => {
+const TabsContainer = ({ tab, setTab, onFetchHarvest, onSubmit }: Props) => {
   return (
     <Tabs
       value={tab}
@@ -74,19 +66,19 @@ const TabsContainer = ({
 
       <div className="flex-grow overflow-y-auto bg-white">
         <TabsContent value="harvest" className="p-6">
-          <ApiConfigForm onSubmit={onApiConfigSubmit} />
+          <ApiConfigForm onSubmit={onSubmit} />
         </TabsContent>
         <TabsContent value="personal" className="p-6">
-          <PersonalForm onSubmit={onPersonalSubmit} />
+          <PersonalForm onSubmit={onSubmit} />
         </TabsContent>
         <TabsContent value="account" className="p-6">
-          <PaymentInfoForm onSubmit={onPaymentSubmit} />
+          <PaymentInfoForm onSubmit={onSubmit} />
         </TabsContent>
         <TabsContent value="emailConfig" className="p-6">
-          <SendEmailConfigForm onSubmit={onSendEmailConfigSubmit} />
+          <SendEmailConfigForm onSubmit={onSubmit} />
         </TabsContent>
         <TabsContent value="invoice" className="p-6">
-          <InvoiceForm onSubmit={onInvoiceSubmit} />
+          <InvoiceForm onSubmit={onSubmit} />
         </TabsContent>
         <TabsContent value="worktime" className="p-6">
           <WorktimeForm onFetch={onFetchHarvest} />
