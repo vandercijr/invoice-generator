@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { DataContext } from "@/utils/context";
-import { formatNumber } from "@/utils/format";
+import { DataContext } from "@utils/context";
+import { formatNumber } from "@utils/format";
 interface Props {
   onFetch: () => void;
 }

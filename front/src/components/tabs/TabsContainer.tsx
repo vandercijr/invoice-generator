@@ -1,10 +1,10 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@radix-ui/react-tabs'
-import PersonalForm from '@/components/forms/PersonalForm'
-import InvoiceForm from '@/components/forms/InvoiceForm'
-import WorktimeForm from '@/components/forms/WorktimeForm'
-import ApiConfigForm from '@/components/forms/ApiConfigForm'
-import PaymentInfoForm from '@/components/forms/PaymentInfoForm'
-import SendEmailConfigForm from "@/components/forms/SendEmailConfigForm";
+import PersonalForm from "@components/forms/PersonalForm";
+import InvoiceForm from "@components/forms/InvoiceForm";
+import WorktimeForm from "@components/forms/WorktimeForm";
+import ApiConfigForm from "@components/forms/ApiConfigForm";
+import PaymentInfoForm from "@components/forms/PaymentInfoForm";
+import SendEmailConfigForm from "@components/forms/SendEmailConfigForm";
 
 interface Props {
   tab: string;

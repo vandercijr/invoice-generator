@@ -1,8 +1,8 @@
 import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { apiConfigSchema } from "@/utils/schemas";
-import { DataContext } from "@/utils/context";
+import { apiConfigSchema } from "@utils/schemas";
+import { DataContext } from "@utils/context";
 
 interface ApiConfig {
   accountId: number;

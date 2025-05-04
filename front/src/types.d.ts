@@ -5,7 +5,7 @@ import {
   invoiceSchema,
   paymentSchema,
   sendEmailConfigSchema,
-} from "@/utils/schemas";
+} from "@utils/schemas";
 
 type Personal = InferType<typeof personalSchema>;
 type Invoice = InferType<typeof invoiceSchema>;

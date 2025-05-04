@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { invoiceSchema } from '@/utils/schemas'
+import { invoiceSchema } from "@utils/schemas";
 import { useContext, useEffect } from "react";
-import { DataContext } from "@/utils/context";
+import { DataContext } from "@utils/context";
 
 interface Props {
   onSubmit: (data: any) => void;

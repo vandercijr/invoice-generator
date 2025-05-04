@@ -1,9 +1,9 @@
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
 import { Table, TR, TH, TD } from "@ag-media/react-pdf-table";
 import { Invoice, Payment, Personal } from "@types";
-import { formatNumber } from "@/utils/format";
+import { formatNumber } from "@utils/format";
 import { format } from "date-fns";
-import { dateToLocalISOMidnight } from "@/utils/date";
+import { dateToLocalISOMidnight } from "@utils/date";
 
 type InvoicePDFProps = {
   invoice: Invoice;
