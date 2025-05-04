@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
-import { fetchData, getDb } from "@/utils/db";
-import { fetchHarvestData } from "@/utils/api";
-import TabsContainer from "@/components/tabs/TabsContainer";
-import InvoicePDF from "@/components/forms/InvoicePDF";
+import { fetchData, getDb } from "@utils/db";
+import { fetchHarvestData } from "@utils/api";
+import TabsContainer from "@components/tabs/TabsContainer";
+import InvoicePDF from "@components/forms/InvoicePDF";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import { DataContext } from "@/utils/context";
+import { DataContext } from "@utils/context";
 import { ApiConfig, EmailConfig, Invoice, Payment, Personal } from "@types";
 import { pdf } from "@react-pdf/renderer";
-import emailjs from "@emailjs/browser";
+// import emailjs from "@emailjs/browser";
+import { sendInvoice } from "@services/invoice";
 
 const App = () => {
   const [tab, setTab] = useState("worktime");
@@ -85,93 +86,33 @@ const App = () => {
     load();
   }, []);
 
-  useEffect(() => {
-    emailjs.init({
-      publicKey: "G6Ss5LUla5ppY_RPH", // 🔑 your EmailJS Public Key
-      blockHeadless: true,
-      blockList: {
-        list: ["foo@emailjs.com", "bar@emailjs.com"],
-        watchVariable: "userEmail", // 👀 will watch userEmail field
-      },
-      limitRate: {
-        id: "app",
-        throttle: 10000, // 10 seconds limit between requests
-      },
-    });
-  }, []); // empty dependency = run once on mount ✅
-
-  const blobToBase64 = (blob: Blob) => {
-    return new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (reader.result) {
-          const base64data = reader.result.toString();
-          resolve(base64data);
-        } else {
-          reject("Failed to read blob");
-        }
-      };
-      reader.readAsDataURL(blob);
-    });
-  };
-
-  const generatePdfBase64 = async (pdfDocument: any) => {
-    const pdfBlob = await pdf(pdfDocument).toBlob();
-    const base64String = await blobToBase64(pdfBlob);
-    console.log("NJJ", base64String);
-    return base64String;
-  };
-
   const handleSendEmail = async () => {
-    // const blob = await pdf(
-    //   <InvoicePDF
-    //     invoice={invoiceInfo}
-    //     payment={paymentInfo}
-    //     personal={personalInfo}
-    //     worktime={harvestData}
-    //   />
-    // ).toBlob();
-
-    const base64Pdf = await generatePdfBase64(
+    const blob = await pdf(
       <InvoicePDF
         invoice={invoiceInfo}
         payment={paymentInfo}
         personal={personalInfo}
         worktime={harvestData}
       />
-    );
+    ).toBlob();
 
-    // const formData = new FormData();
-    // formData.append("to", emailConfig.emailTo);
-    // formData.append("from", emailConfig.emailSender);
-    // formData.append("subject", "Your Invoice");
-    // formData.append("file", blob, "invoice.pdf");
+    const attachment = new File([blob], `invoice_${invoiceInfo.number}.pdf`, {
+      type: "application/pdf",
+    });
 
-    // await fetch("https://api.emailjs.com/api/v1.0/email/send", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     service_id: "service_m8c03lm",
-    //     template_id: "template_ortg0xp",
-    //     user_id: "G6Ss5LUla5ppY_RPH",
-    //   }),
-    // });
-    await emailjs.send(
-      "service_m8c03lm",
-      "template_ortg0xp",
-      {
-        message: "Your message here",
-        invoice_number: invoiceInfo.number,
-        name: personalInfo.name,
-        worktime_from: invoiceInfo.from,
-        worktime_to: invoiceInfo.to,
-        email_to: "vandercijr@gmail.com",
-        content: base64Pdf,
-      }
-      // "G6Ss5LUla5ppY_RPH" // this is the "User ID" or "Public Key" you get from EmailJS
+    const formData = new FormData();
+    formData.append(
+      "subject",
+      `Invoice #${invoiceInfo.number} ${personalInfo.name}`
     );
+    formData.append("name", personalInfo.name);
+    formData.append("worktime_from", invoiceInfo.from);
+    formData.append("worktime_to", invoiceInfo.to);
+    formData.append("email_to", emailConfig.emailTo);
+    formData.append("reply_to", emailConfig.emailSender);
+    formData.append("attachment", attachment);
+
+    await sendInvoice(formData);
   };
 
   return (
