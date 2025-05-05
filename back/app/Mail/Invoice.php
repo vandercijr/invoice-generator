@@ -37,7 +37,7 @@ class Invoice extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address(env('MAIL_FROM_ADDRESS', 'hello@example.com'), $this->data['name']),
+            from: new Address($this->data['username'], $this->data['name']),
             replyTo: [
                 new Address($this->data['reply_to'],  $this->data['name']),
             ],

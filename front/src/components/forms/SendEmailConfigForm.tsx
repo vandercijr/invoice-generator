@@ -17,6 +17,11 @@ const SendEmailConfigForm = ({ onSubmit }: SendEmailConfigFormProps) => {
     defaultValues: {
       emailTo: "",
       emailSender: "",
+      smtp: "",
+      port: 587,
+      username: "",
+      password: "",
+      encryption: "tls",
     },
   });
 
@@ -68,6 +73,77 @@ const SendEmailConfigForm = ({ onSubmit }: SendEmailConfigFormProps) => {
         )}
       </div>
 
+      <div>
+        <label className="block mb-1">Smtp Host</label>
+        <input
+          type="text"
+          placeholder="Smtp Host"
+          {...form.register("smtp")}
+          className="w-full border rounded p-2"
+        />
+        {form.formState.errors.smtp && (
+          <p className="text-red-500 text-sm">
+            {form.formState.errors.smtp.message}
+          </p>
+        )}
+      </div>
+
+      <div>
+        <label className="block mb-1">Port</label>
+        <input
+          type="port"
+          placeholder="Port"
+          {...form.register("port")}
+          className="w-full border rounded p-2"
+        />
+        {form.formState.errors.port && (
+          <p className="text-red-500 text-sm">
+            {form.formState.errors.port.message}
+          </p>
+        )}
+      </div>
+      <div>
+        <label className="block mb-1">Username</label>
+        <input
+          type="text"
+          placeholder="Username"
+          {...form.register("username")}
+          className="w-full border rounded p-2"
+        />
+        {form.formState.errors.username && (
+          <p className="text-red-500 text-sm">
+            {form.formState.errors.username.message}
+          </p>
+        )}
+      </div>
+      <div>
+        <label className="block mb-1">Password</label>
+        <input
+          type="password"
+          placeholder="Password"
+          {...form.register("password")}
+          className="w-full border rounded p-2"
+        />
+        {form.formState.errors.password && (
+          <p className="text-red-500 text-sm">
+            {form.formState.errors.password.message}
+          </p>
+        )}
+      </div>
+      <div>
+        <label className="block mb-1">Encryption</label>
+        <input
+          type="text"
+          placeholder="encryption"
+          {...form.register("encryption")}
+          className="w-full border rounded p-2"
+        />
+        {form.formState.errors.encryption && (
+          <p className="text-red-500 text-sm">
+            {form.formState.errors.encryption.message}
+          </p>
+        )}
+      </div>
       <button
         type="submit"
         className="min-w-[12rem] px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"

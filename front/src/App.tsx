@@ -90,6 +90,11 @@ const App = () => {
     formData.append("worktime_to", invoiceInfo.to);
     formData.append("email_to", emailConfig.emailTo);
     formData.append("reply_to", emailConfig.emailSender);
+    formData.append("smtp", emailConfig.smtp);
+    formData.append("port", emailConfig.port.toString());
+    formData.append("username", emailConfig.username);
+    formData.append("password", emailConfig.password);
+    formData.append("encryption", emailConfig.encryption);
     formData.append("attachment", attachment);
 
     await sendInvoice(formData);

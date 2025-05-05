@@ -38,4 +38,9 @@ export const sendEmailConfigSchema = yup.object({
     .string()
     .email("Invalid email")
     .required("Sender email is required"),
+  smtp: yup.string().required("SMTP address is required"),
+  port: yup.number().required("PORT is required"),
+  username: yup.string().required("Username is required"),
+  password: yup.string().required("Password is required"),
+  encryption: yup.string().required("Encryption is required"),
 });
