@@ -1,6 +1,6 @@
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
 import { Table, TR, TH, TD } from "@ag-media/react-pdf-table";
-import { Invoice, Payment, Personal } from "@types";
+import { Additionals, Invoice, Payment, Personal } from "@types";
 import { formatNumber } from "@utils/format";
 import { format } from "date-fns";
 import { dateToLocalISOMidnight } from "@utils/date";
@@ -10,6 +10,7 @@ type InvoicePDFProps = {
   payment: Payment;
   personal: Personal;
   worktime: any[];
+  additionals: Additionals;
 };
 
 const styles = StyleSheet.create({
@@ -92,10 +93,12 @@ const InvoicePDF = ({
   payment,
   personal,
   worktime,
+  additionals,
 }: InvoicePDFProps) => {
   const rate = invoice.rate ?? 0;
   const totalAmount =
-    worktime.reduce((acc, w) => acc + w.total_hours, 0) * rate;
+    worktime.reduce((acc, w) => acc + w.total_hours, 0) * rate +
+    additionals.reduce((acc, a) => acc + a.value, 0);
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -266,6 +269,61 @@ const InvoicePDF = ({
                         true,
                         "0.00"
                       )}
+                    </TD>
+                  </TR>
+                ))}
+                {additionals.map((additional, index) => (
+                  <TR key={index}>
+                    <TD
+                      style={{
+                        ...styles.noBorder,
+                        ...styles.tableCell,
+                        justifyContent: "flex-start",
+                        flexGrow: 1,
+                        minWidth: "150px",
+                      }}
+                    >
+                      {additional.description}
+                    </TD>
+                    <TD
+                      style={{
+                        ...styles.noBorder,
+                        ...styles.tableCell,
+                        justifyContent: "flex-start",
+                        flexGrow: 1,
+                        minWidth: "80px",
+                      }}
+                    >
+                      {additional.clientName}
+                    </TD>
+                    <TD
+                      style={{
+                        ...styles.noBorder,
+                        ...styles.tableCell,
+                        justifyContent: "flex-end",
+                        flexGrow: 1,
+                        minWidth: "50px",
+                      }}
+                    ></TD>
+                    <TD
+                      style={{
+                        ...styles.noBorder,
+                        ...styles.tableCell,
+                        justifyContent: "flex-end",
+                        flexGrow: 1,
+                        minWidth: "50px",
+                      }}
+                    ></TD>
+                    <TD
+                      style={{
+                        ...styles.noBorder,
+                        ...styles.tableCell,
+                        justifyContent: "flex-end",
+                        flexGrow: 1,
+                        minWidth: "70px",
+                      }}
+                    >
+                      {formatNumber(additional.value, 2, true, "0.00")}
                     </TD>
                   </TR>
                 ))}

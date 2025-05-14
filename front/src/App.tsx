@@ -1,11 +1,18 @@
 import { useState, useEffect } from "react";
-import { fetchData, getDb } from "@utils/db";
+import { fetchAllData, fetchData, getDb } from "@utils/db";
 import { fetchHarvestData } from "@utils/api";
 import TabsContainer from "@components/tabs/TabsContainer";
 import InvoicePDF from "@components/forms/InvoicePDF";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { DataContext } from "@utils/context";
-import { ApiConfig, EmailConfig, Invoice, Payment, Personal } from "@types";
+import {
+  Additionals,
+  ApiConfig,
+  EmailConfig,
+  Invoice,
+  Payment,
+  Personal,
+} from "@types";
 import { pdf } from "@react-pdf/renderer";
 // import emailjs from "@emailjs/browser";
 import { sendInvoice } from "@services/invoice";
@@ -19,6 +26,7 @@ const App = () => {
   const [personalInfo, setPersonalInfo] = useState({} as Personal);
   const [paymentInfo, setPaymentInfo] = useState({} as Payment);
   const [emailConfig, setEmailConfig] = useState({} as EmailConfig);
+  const [additionalsInfo, setAdditionalsInfo] = useState({} as Additionals);
   const [reloadData, setReloadData] = useState(true);
   const [sending, setSending] = useState(false);
 
@@ -54,11 +62,13 @@ const App = () => {
         const payment = await fetchData("payment", 1);
         const personal = await fetchData("personal", 1);
         const emailConfig = await fetchData("emailConfig", 1);
+        const additionals = await fetchAllData("additionals");
         if (payment) setPaymentInfo(payment);
         if (personal) setPersonalInfo(personal);
         if (config) setApiConfig(config);
         if (invoice) setInvoiceInfo(invoice);
         if (emailConfig) setEmailConfig(emailConfig);
+        if (additionals) setAdditionalsInfo(additionals);
       };
       load();
       setReloadData(false);
@@ -73,6 +83,7 @@ const App = () => {
         payment={paymentInfo}
         personal={personalInfo}
         worktime={harvestData}
+        additionals={additionalsInfo[0].additionals}
       />
     ).toBlob();
 
@@ -110,6 +121,7 @@ const App = () => {
         personal: personalInfo,
         emailConfig: emailConfig,
         worktime: harvestData,
+        additionals: additionalsInfo,
       }}
     >
       <div className="w-screen h-screen bg-gray-50 flex items-center justify-center">
@@ -135,6 +147,7 @@ const App = () => {
                         payment={paymentInfo}
                         personal={personalInfo}
                         worktime={harvestData}
+                        additionals={additionalsInfo[0].additionals}
                       />
                     }
                     fileName="invoice.pdf"

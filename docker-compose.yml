@@ -9,9 +9,9 @@ services:
     volumes:
       - ./back:/var/www
 
-  nginx:
+  server:
     image: nginx:alpine
-    container_name: nginx
+    container_name: server
     ports:
       - "8000:80"
     volumes:
@@ -20,11 +20,11 @@ services:
     depends_on:
       - php
 
-  react:
+  ui:
     build:
       context: ./front
       dockerfile: Dockerfile
-    container_name: react
+    container_name: ui
     environment:
       - NODE_ENV=production
     ports:

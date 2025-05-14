@@ -44,3 +44,21 @@ export const sendEmailConfigSchema = yup.object({
   password: yup.string().required("Password is required"),
   encryption: yup.string().required("Encryption is required"),
 });
+
+export const additionalSchema = yup.object().shape({
+  description: yup.string().required("Description is required"),
+  clientName: yup.string().required("Client Name is required"),
+  value: yup
+    .number()
+    .typeError("Value must be a number")
+    .min(0, "Value must be at least 0")
+    .required("Value is required"),
+  view: yup.boolean().required(),
+});
+
+export const additionalsSchema = yup.object().shape({
+  additionals: yup
+    .array()
+    .of(additionalSchema)
+    .min(1, "At least one additional item is required"),
+});

@@ -1,4 +1,4 @@
-import { DataContextType } from "@types";
+import { Additionals, DataContextType } from "@types";
 import { createContext } from "react";
 
 export const DataContext = createContext<DataContextType>({
@@ -8,4 +8,5 @@ export const DataContext = createContext<DataContextType>({
   personal: null,
   emailConfig: null,
   worktime: [],
+  additionals: [] as Additionals,
 });

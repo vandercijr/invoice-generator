@@ -6,6 +6,7 @@ import ApiConfigForm from "@components/forms/ApiConfigForm";
 import PaymentInfoForm from "@components/forms/PaymentInfoForm";
 import SendEmailConfigForm from "@components/forms/SendEmailConfigForm";
 import { ApiConfig, EmailConfig, Invoice, Payment, Personal } from "@types";
+import AdditionalsForm from "@components/forms/AdditionalsForm";
 
 interface Props {
   tab: string;
@@ -57,6 +58,12 @@ const TabsContainer = ({ tab, setTab, onFetchHarvest, onSubmit }: Props) => {
           Invoice Info
         </TabsTrigger>
         <TabsTrigger
+          value="additionals"
+          className="px-4 py-2 text-sm font-medium text-gray-600 rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
+        >
+          Additionals
+        </TabsTrigger>
+        <TabsTrigger
           value="worktime"
           className="px-4 py-2 text-sm font-medium text-gray-600 rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
         >
@@ -79,6 +86,9 @@ const TabsContainer = ({ tab, setTab, onFetchHarvest, onSubmit }: Props) => {
         </TabsContent>
         <TabsContent value="invoice" className="p-6">
           <InvoiceForm onSubmit={onSubmit} />
+        </TabsContent>
+        <TabsContent value="additionals" className="p-6">
+          <AdditionalsForm onSubmit={onSubmit} />
         </TabsContent>
         <TabsContent value="worktime" className="p-6">
           <WorktimeForm onFetch={onFetchHarvest} />
