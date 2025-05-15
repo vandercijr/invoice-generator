@@ -10,3 +10,6 @@ All data is stored locally
 
 `docker compose up --build`
 
+To get your Harvest Account ID and Token access
+
+https://id.getharvest.com/developers
