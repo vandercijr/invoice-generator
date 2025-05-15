@@ -29,43 +29,43 @@ const TabsContainer = ({ tab, setTab, onFetchHarvest, onSubmit }: Props) => {
       <TabsList className="flex justify-center gap-4 py-4 border-b bg-gray-50">
         <TabsTrigger
           value="harvest"
-          className="px-4 py-2 text-sm font-medium text-gray-600 rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
+          className="px-4 py-2 text-sm font-medium text-gray-600 bg-white rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
         >
           Api Config
         </TabsTrigger>
         <TabsTrigger
           value="personal"
-          className="px-4 py-2 text-sm font-medium text-gray-600 rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
+          className="px-4 py-2 text-sm font-medium text-gray-600 bg-white rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
         >
           Personal Info
         </TabsTrigger>
         <TabsTrigger
           value="account"
-          className="px-4 py-2 text-sm font-medium text-gray-600 rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
+          className="px-4 py-2 text-sm font-medium text-gray-600 bg-white rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
         >
           Payment Info
         </TabsTrigger>
         <TabsTrigger
           value="emailConfig"
-          className="px-4 py-2 text-sm font-medium text-gray-600 rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
+          className="px-4 py-2 text-sm font-medium text-gray-600 bg-white rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
         >
           Send Email Config
         </TabsTrigger>
         <TabsTrigger
           value="invoice"
-          className="px-4 py-2 text-sm font-medium text-gray-600 rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
+          className="px-4 py-2 text-sm font-medium text-gray-600 bg-white rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
         >
           Invoice Info
         </TabsTrigger>
         <TabsTrigger
           value="additionals"
-          className="px-4 py-2 text-sm font-medium text-gray-600 rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
+          className="px-4 py-2 text-sm font-medium text-gray-600 bg-white rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
         >
           Additionals
         </TabsTrigger>
         <TabsTrigger
           value="worktime"
-          className="px-4 py-2 text-sm font-medium text-gray-600 rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
+          className="px-4 py-2 text-sm font-medium text-gray-600 bg-white rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
         >
           Worktime
         </TabsTrigger>
