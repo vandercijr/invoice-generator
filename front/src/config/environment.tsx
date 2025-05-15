@@ -3,7 +3,7 @@ const environment = {
     baseURL: "http://localhost:8000/api",
   },
   production: {
-    baseURL: "http://localhost:8000/api",
+    baseURL: "http://api.invoicegen.space/api",
   },
 };
 
