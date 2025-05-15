@@ -8,6 +8,9 @@ const resolvePath = (p: string) => path.resolve(__dirname, "src", p);
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  build: {
+    sourcemap: true,
+  },
   define: {
     __APP_VERSION__: JSON.stringify(version),
     "process.env": {
