@@ -83,7 +83,7 @@ const App = () => {
         payment={paymentInfo}
         personal={personalInfo}
         worktime={harvestData}
-        additionals={additionalsInfo[0].additionals}
+        additionals={filteredAdditionals}
       />
     ).toBlob();
 
@@ -111,6 +111,10 @@ const App = () => {
     await sendInvoice(formData);
     setSending(false);
   };
+
+  const filteredAdditionals = (additionalsInfo[0]?.additionals ?? []).filter(
+    (a) => a.view
+  );
 
   return (
     <DataContext.Provider
@@ -147,7 +151,7 @@ const App = () => {
                         payment={paymentInfo}
                         personal={personalInfo}
                         worktime={harvestData}
-                        additionals={additionalsInfo[0].additionals}
+                        additionals={filteredAdditionals}
                       />
                     }
                     fileName="invoice.pdf"
