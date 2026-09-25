@@ -46,11 +46,14 @@ const SendEmailConfigForm = ({ onSubmit }: SendEmailConfigFormProps) => {
       <div>
         <label className="block mb-1">Email To</label>
         <input
-          type="email"
-          placeholder="Email to"
+          type="text"
+          placeholder="email1@example.com, email2@example.com"
           {...form.register("emailTo")}
           className="w-full border rounded p-2"
         />
+        <p className="text-xs text-gray-400 mt-1">
+          Separate multiple recipients with commas.
+        </p>
         {form.formState.errors.emailTo && (
           <p className="text-red-500 text-sm">
             {form.formState.errors.emailTo.message}

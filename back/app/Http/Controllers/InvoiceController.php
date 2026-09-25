@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendInvoiceEmail;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Config;
-use App\Mail\Invoice;
-use Throwable;
 
 class InvoiceController extends Controller
 {
@@ -17,7 +14,20 @@ class InvoiceController extends Controller
             'name' => 'required|string|max:255',
             'worktime_from' => 'required|string',
             'worktime_to' => 'required|string',
-            'email_to' => 'required|email|max:255',
+            'email_to' => ['required', 'string', 'max:1000', function ($attribute, $value, $fail) {
+                $emails = array_filter(array_map('trim', explode(',', $value)));
+
+                if (empty($emails)) {
+                    $fail('At least one recipient email is required.');
+                    return;
+                }
+
+                foreach ($emails as $email) {
+                    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        $fail("The email address \"{$email}\" is invalid.");
+                    }
+                }
+            }],
             'reply_to' => 'required|email|max:255',
             'smtp' => 'required|string',
             'port' => 'required|integer',
@@ -27,7 +37,9 @@ class InvoiceController extends Controller
             'attachment' => 'required|file|mimes:pdf|max:5120', // max 5MB
         ]);
 
-        Config::set('mail.mailers.smtp', [
+        $emailTo = array_filter(array_map('trim', explode(',', $request->email_to)));
+
+        $mailerConfig = [
             'transport' => 'smtp',
             'host' => $request['smtp'],
             'port' => $request['port'],
@@ -36,24 +48,24 @@ class InvoiceController extends Controller
             'encryption' => $request['encryption'],
             'timeout' => null,
             'auth_mode' => null,
-        ]);
+        ];
+
+        $data = [
+            'subject' => $request['subject'],
+            'name' => $request['name'],
+            'worktime_from' => $request['worktime_from'],
+            'worktime_to' => $request['worktime_to'],
+            'username' => $request['username'],
+            'reply_to' => $request['reply_to'],
+        ];
 
         $file = $request->file('attachment');
-        $fileContent = file_get_contents($file->getRealPath());
+        $fileContent = base64_encode(file_get_contents($file->getRealPath()));
         $fileName = $file->getClientOriginalName();
         $mimeType = $file->getMimeType();
-    
-        try {
-            Mail::to($request->email_to)->send(
-                new Invoice($request->all(), $fileContent, $fileName, $mimeType)
-            );
 
-            return response()->json(['message' => 'Invoice submitted successfully.'], 200);
-        } catch (Throwable $e) {
-            return response()->json([
-                'message' => 'Failed to send the email.',
-                'error' => $e->getMessage(),
-            ], 500);
-        }
+        SendInvoiceEmail::dispatch($emailTo, $data, $fileContent, $fileName, $mimeType, $mailerConfig);
+
+        return response()->json(['message' => 'Invoice queued for sending.'], 202);
     }
 }

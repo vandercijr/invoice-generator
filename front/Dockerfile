@@ -2,6 +2,8 @@ FROM node:18 as builder
 WORKDIR /app
 COPY . .
 RUN npm install
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 RUN npm run build
 
 FROM nginx:alpine

@@ -47,3 +47,33 @@ export const updateData = async (store: string, data: any) => {
   const db = await getDb();
   await db.put(store, data);
 };
+
+export const exportAllData = async () => {
+  const db = await getDb();
+  const stores = Array.from(db.objectStoreNames);
+  const data: Record<string, any[]> = {};
+  for (const store of stores) {
+    data[store] = await db.getAll(store);
+  }
+  return { version: DB_VERSION, exportedAt: new Date().toISOString(), data };
+};
+
+export const importAllData = async (backup: { data: Record<string, any[]> }) => {
+  const db = await getDb();
+  const stores = Array.from(db.objectStoreNames).filter(
+    (store) => Array.isArray(backup?.data?.[store])
+  );
+  if (!stores.length) {
+    throw new Error("Backup file has no recognizable data.");
+  }
+
+  const tx = db.transaction(stores, "readwrite");
+  for (const store of stores) {
+    const objectStore = tx.objectStore(store);
+    await objectStore.clear();
+    for (const record of backup.data[store]) {
+      await objectStore.put(record);
+    }
+  }
+  await tx.done;
+};

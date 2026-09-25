@@ -135,6 +135,7 @@ const App = () => {
             setTab={setTab}
             onFetchHarvest={handleFetchHarvest}
             onSubmit={handleSubmit}
+            onDataImported={() => setReloadData(true)}
           />
 
           {!!invoiceInfo &&

@@ -1,10 +1,15 @@
 const environment = {
   development: {
-    baseURL: "http://localhost:8000/api",
+    baseURL: "http://localhost:9100/api",
   },
   production: {
     baseURL: "https://api.invoicegen.space/api",
   },
 };
 
-export default environment[process.env.NODE_ENV || "development"];
+const defaults = environment[process.env.NODE_ENV || "development"];
+
+export default {
+  ...defaults,
+  baseURL: import.meta.env.VITE_API_BASE_URL || defaults.baseURL,
+};

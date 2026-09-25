@@ -32,8 +32,17 @@ export const apiConfigSchema = yup.object({
 export const sendEmailConfigSchema = yup.object({
   emailTo: yup
     .string()
-    .email("Invalid email")
-    .required("Recipient email is required"),
+    .required("Recipient email is required")
+    .test("multiple-emails", "One or more emails are invalid", (value) => {
+      if (!value) return false;
+
+      const emails = value
+        .split(",")
+        .map((e) => e.trim())
+        .filter(Boolean); // removes empty entries
+
+      return emails.every((email) => yup.string().email().isValidSync(email));
+    }),
   emailSender: yup
     .string()
     .email("Invalid email")

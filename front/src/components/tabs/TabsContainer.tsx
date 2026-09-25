@@ -7,6 +7,7 @@ import PaymentInfoForm from "@components/forms/PaymentInfoForm";
 import SendEmailConfigForm from "@components/forms/SendEmailConfigForm";
 import { ApiConfig, EmailConfig, Invoice, Payment, Personal } from "@types";
 import AdditionalsForm from "@components/forms/AdditionalsForm";
+import BackupRestoreForm from "@components/forms/BackupRestoreForm";
 
 interface Props {
   tab: string;
@@ -17,9 +18,16 @@ interface Props {
     data: ApiConfig | Personal | Payment | EmailConfig | Invoice,
     callback?: (any) => void
   ) => void;
+  onDataImported: () => void;
 }
 
-const TabsContainer = ({ tab, setTab, onFetchHarvest, onSubmit }: Props) => {
+const TabsContainer = ({
+  tab,
+  setTab,
+  onFetchHarvest,
+  onSubmit,
+  onDataImported,
+}: Props) => {
   return (
     <Tabs
       value={tab}
@@ -69,6 +77,12 @@ const TabsContainer = ({ tab, setTab, onFetchHarvest, onSubmit }: Props) => {
         >
           Worktime
         </TabsTrigger>
+        <TabsTrigger
+          value="backup"
+          className="px-4 py-2 text-sm font-medium text-gray-600 bg-white rounded-t-md hover:text-gray-800 hover:bg-gray-100 data-[state=active]:text-blue-600 data-[state=active]:border-b-2 data-[state=active]:border-blue-600 data-[state=active]:bg-white"
+        >
+          Backup
+        </TabsTrigger>
       </TabsList>
 
       <div className="flex-grow overflow-y-auto bg-white">
@@ -92,6 +106,9 @@ const TabsContainer = ({ tab, setTab, onFetchHarvest, onSubmit }: Props) => {
         </TabsContent>
         <TabsContent value="worktime" className="p-6">
           <WorktimeForm onFetch={onFetchHarvest} />
+        </TabsContent>
+        <TabsContent value="backup" className="p-6">
+          <BackupRestoreForm onImported={onDataImported} />
         </TabsContent>
       </div>
     </Tabs>
